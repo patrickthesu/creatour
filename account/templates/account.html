@@ -1,0 +1,10 @@
+{% extends "baseGeneric.html" %}
+
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<h2>Вы авторизованы как {% if user.first_name %}{{user.first_name}} {{user.last_name}}{% else %}{{user.get__username}}{% endif %}</h2>
+{% block user %}
+<p class = "warning-text">Произошла ошибка на сервере, обратитесь к администратору</p>
+{% endblock %}
+{% endblock %}
