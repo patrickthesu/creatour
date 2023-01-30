@@ -1,0 +1,12 @@
+{% extends "baseGeneric.html" %}
+
+{% block title %}Создать маршрут{% endblock %}
+
+{% block content %}
+<h1>Создать продукт</h1>
+<form href = {% url 'createProduct' %} method = "post" enctype = "multipart/form-data">
+  {% csrf_token %}
+  {{form.as_p}}
+  <button type = "submit" value = "OK">Добавить</button>
+</form>
+{% endblock %}

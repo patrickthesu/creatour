@@ -1,0 +1,72 @@
+{% extends "baseGeneric.html" %}
+
+{% block titile %}{% if product %}{{product.title}}{% else %}Продукта нет в базе{% endif %}{% endblock %}
+
+{% block content %}
+<section class = "content-section" id = "product-detail">
+{% if product %}
+<h2 class = "section-title">{{product.title}}</h2>
+<section class = "content-block">
+  <h3 class = "block-title">Описание:</h3>
+  <p class = "big-text">{{product.description}}</p>
+</section>
+<section class = "section-block">
+  {% if product.getEthaps %}
+  {% for ethap in product.getEthaps %}
+  <div class = "ethap block">
+    <img src = "{{ ethap.image.url }}">
+    <h6 class = "block-title">{{ethap.title}}</h6>
+    <p>{{ethap.description}}</p>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p>У данного продукта нет этапов</p>
+  {% endif %}
+</section>
+<section class = "content-block">
+  {% if product.creator %}
+  <span class = "block-title"><strong>Автор:</strong>{{product.creator.username}}</span>
+  <a class = "button" href = "">Узнать больше про этого автора</a>
+  {% else %}
+  <span class = "warnint-text">У данного тура нет автора</span>
+  {% endif %}
+</section>
+<section class = "content-block">
+  <strong>Цена:</strong><span>{{product.price}}</span>
+</section>
+{% else %}
+<h2 class = "section-title">Такого продукта нет на сайте</h2>
+<p class = "warning-text">Введите правильный url, или перейдте к поиску продукта</p>
+<a href = "{% url 'productList' %}">Перейти к посику...</a>
+{% endif %}
+</section>
+{% if consumer %}
+<form href = "{{request.url}}" method = "post">
+    {% csrf_token %}
+    {{form.rate}}
+    {{form.comment}}
+    <input type="submit" value="Submit">
+</form>
+{% endif %}
+<section class = "content-block">
+  <h6 class = "block-title">Отзывы:</h6>
+  {% if reviews %}
+  {% for review in reviews %}
+  <div class = "block">
+    <span>{{review.user.first_name}} {{review.user.last_name}}</span>
+    <span>{{review.rate}}</span>
+    <p>{{review.comment}}</p>
+    <img src = "likes.png" alt = "Нравится">
+    <span>{{reiview.likes}}</span>
+    <img src = "dislikes.png" alt = "Не нравится">
+    <span>{{reiview.dislikes}}</span>
+    {% if review.user == request.user %}
+    <a href = "{% url 'deleteReview' reviewPk=review.pk %}">Удалить отзыв</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+  {% else %}
+  <p>У этого тура ещё нет отзывов.</p>
+  {% endif %}
+</section>
+{% endblock %}

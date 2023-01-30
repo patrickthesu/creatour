@@ -1,27 +1,30 @@
-from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.shortcuts import render
+from django.urls import reverse
 
 from . import services
 from . import forms
 
+def forbidden ( request ):
+    return render ( request, "forbidden.html", context = {} )
+
 def signinView ( request ):
     form = forms.SigninForm
-
     if request.method == "POST":
         form = forms.SigninForm (request.POST)
         if not form.is_valid() or not services.signin(form): form.add_error(None, "Ошибка регистрации")
+        return HttpResponseRedirect(reverse("login"))
 
     return render ( request, "signin.html", context = {"form": form, } )
 
 def loginView ( request ):
+
     form = forms.LoginForm
     if request.method == "POST":
         form = forms.LoginForm (request.POST)
-        if not form.is_valid():
-            if services.login ( request, **form.cleaned_data ): return HttpResponseRedirect(reverse("index") )            
-        form.add_error(None, "Неправильное имя и/или пароль")
+        if form.is_valid():
+            if services.login ( request, **form.cleaned_data ): return HttpResponseRedirect(reverse("profile"))
+            form.add_error(None, "Неправильное имя и/или пароль")
 
     return render ( request, "login.html", context = {"form": form, } )
 
@@ -37,15 +40,17 @@ def authorView (request):
 
 
 def producerView (request):
-    pass
+    return render ( request, "account.html", context = {} )
 
-def consumerView (request):
-    pass
+def consumerView (request): 
+    return render ( request, "account.html", context = {} )
 
-@login_required()
+@services.login_required
 def profileView (request):
-
-    group = request.user.groups.all()[0]
+    try:
+        group = request.user.groups.all()[0]
+    except:
+        return render ( request, "account.html", context = {} )
 
     if services.isUserAuthor ( request.user ):
         return authorView ( request )
@@ -56,9 +61,16 @@ def profileView (request):
 
     return render ( request, "account.html", context = {} )
 
+@services.login_required
+def editProfileView (request):
+   return render ( request, "editProfile.html", context = {} )
+
+def getAuthorDetails ( request, authorId ):
+    pass
+
 def resetPasswordView (request):
     pass
 
-@login_required()
+#@services.login_required(reverse('login'))
 def getProfileStatsView (request):
     pass

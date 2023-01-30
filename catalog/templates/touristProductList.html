@@ -8,7 +8,13 @@
   {% if product_list %}
   <ul>
     {% for product in product_list %}
-    <li><a href = {{product.getAbsoluteUrl}}>{{product.name}}</li>
+    <li>
+      <img src = "{{ product.headerImage.url }}">
+      <h6 class = "block-title"><a href = {{product.getAbsoluteUrl}}>{{product.title}}</a></h6>
+      <a href = "">{{product.author.username}}</a>
+      <span>{{product.time}} | {{product.getEthapsCount}}</span>
+      <span>{{product.price}}</span>
+    </li>
     {% endfor %}
   <ul>
   {% else %}

@@ -17,16 +17,9 @@ def deleteEthap ( request, ethapId ):
         print ("ERROR: Delete ethap " + str (err))
     return False
 
-
-
 def editEthap (request, ethapId):
     form = forms.EthapForm (request.POST)
     if form.is_valid():
         ethap = models.TouristProductEthap.objects.get(pk=ethapId)
         ethap.set ( **request.args )
-        ethap.save ()
-        
-        
-        
-
-    
+        ethap.save ()    

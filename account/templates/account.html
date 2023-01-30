@@ -7,4 +7,8 @@
 {% block user %}
 <p class = "warning-text">Произошла ошибка на сервере, обратитесь к администратору</p>
 {% endblock %}
+<section class = "content-block">
+  <a href = {% url 'editProfile' %}>Редактировать свой профиль</a>
+  <a href = {% url 'logout' %}>Выйти из аккаунта</a>
+</section>
 {% endblock %}
